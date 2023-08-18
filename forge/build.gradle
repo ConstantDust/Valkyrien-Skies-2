@@ -103,12 +103,12 @@ dependencies {
         exclude group: "com.google.guava"
     }
 
-    forgeRuntimeLibrary shadowCommon("org.valkyrienskies:physics_api_krunch:1.0.0+eb3ae45554") {
+    forgeRuntimeLibrary shadowCommon("org.valkyrienskies:physics_api_krunch:1.0.0+61e725b93e") {
         transitive = false
         exclude group: "com.google.guava"
     }
 
-    forgeRuntimeLibrary shadowCommon("org.valkyrienskies:physics_api:1.0.0+0b6f5db802") {
+    forgeRuntimeLibrary shadowCommon("org.valkyrienskies:physics_api:1.0.0+63b53cc647") {
         transitive = false
         exclude group: "com.google.guava"
     }

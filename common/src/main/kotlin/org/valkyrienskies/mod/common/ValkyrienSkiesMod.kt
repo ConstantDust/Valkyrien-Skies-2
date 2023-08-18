@@ -20,6 +20,7 @@ import org.valkyrienskies.core.impl.hooks.VSEvents
 import org.valkyrienskies.mod.common.blockentity.TestHingeBlockEntity
 import org.valkyrienskies.mod.common.config.VSGameConfig
 import org.valkyrienskies.mod.common.entity.ShipMountingEntity
+import org.valkyrienskies.mod.common.entity.VSPhysicsEntity
 import org.valkyrienskies.mod.common.networking.VSGamePackets
 import org.valkyrienskies.mod.common.util.GameTickForceApplier
 
@@ -34,10 +35,13 @@ object ValkyrienSkiesMod {
     lateinit var TEST_FLAP_ITEM: Item
     lateinit var TEST_WING: Block
     lateinit var TEST_WING_ITEM: Item
+    lateinit var TEST_SPHERE: Block
     lateinit var SHIP_CREATOR_ITEM: Item
     lateinit var SHIP_ASSEMBLER_ITEM: Item
     lateinit var SHIP_CREATOR_ITEM_SMALLER: Item
+    lateinit var PHYSICS_ENTITY_CREATOR_ITEM: Item
     lateinit var SHIP_MOUNTING_ENTITY_TYPE: EntityType<ShipMountingEntity>
+    lateinit var PHYSICS_ENTITY_TYPE: EntityType<VSPhysicsEntity>
     lateinit var TEST_HINGE_BLOCK_ENTITY_TYPE: BlockEntityType<TestHingeBlockEntity>
 
     val VS_CREATIVE_TAB = ResourceKey.create(Registries.CREATIVE_MODE_TAB, ResourceLocation("valkyrienskies"))

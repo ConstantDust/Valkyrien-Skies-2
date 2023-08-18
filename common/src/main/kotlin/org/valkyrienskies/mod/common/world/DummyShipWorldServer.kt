@@ -10,6 +10,8 @@ import org.valkyrienskies.core.api.world.LevelYRange
 import org.valkyrienskies.core.apigame.ShipTeleportData
 import org.valkyrienskies.core.apigame.constraints.VSConstraint
 import org.valkyrienskies.core.apigame.constraints.VSConstraintId
+import org.valkyrienskies.core.apigame.physics.PhysicsEntityData
+import org.valkyrienskies.core.apigame.physics.PhysicsEntityServer
 import org.valkyrienskies.core.apigame.world.IPlayer
 import org.valkyrienskies.core.apigame.world.ServerShipWorldCore
 import org.valkyrienskies.core.apigame.world.chunks.BlockType
@@ -48,6 +50,18 @@ object DummyShipWorldServer : ServerShipWorldCore {
         TODO("Not yet implemented")
     }
 
+    override fun createPhysicsEntity(physicsEntityData: PhysicsEntityData, dimensionId: DimensionId): PhysicsEntityServer {
+        TODO("Not yet implemented")
+    }
+
+    override fun deletePhysicsEntity(id: ShipId) {
+        // This is implemented because physics entities get deleted after the vs pipeline?
+    }
+
+    override fun allocateShipId(dimensionId: DimensionId): ShipId {
+        TODO("Not yet implemented")
+    }
+
     override fun createNewConstraint(vsConstraint: VSConstraint): VSConstraintId? {
         TODO("Not yet implemented")
     }
@@ -76,6 +90,10 @@ object DummyShipWorldServer : ServerShipWorldCore {
     }
 
     override fun teleportShip(ship: ServerShip, teleportData: ShipTeleportData) {
+        TODO("Not yet implemented")
+    }
+
+    override fun teleportPhysicsEntity(physicsEntityServer: PhysicsEntityServer, teleportData: ShipTeleportData) {
         TODO("Not yet implemented")
     }
 
