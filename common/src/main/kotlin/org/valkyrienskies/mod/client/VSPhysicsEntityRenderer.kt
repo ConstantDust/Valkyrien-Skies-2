@@ -23,9 +23,7 @@ class VSPhysicsEntityRenderer(context: EntityRendererProvider.Context) : EntityR
         multiBufferSource: MultiBufferSource, i: Int
     ) {
         val blockState = ValkyrienSkiesMod.TEST_SPHERE.defaultBlockState()
-        if (blockState.renderShape != MODEL) {
-            return
-        }
+
         val level = fallingBlockEntity.level()
         if (blockState === level.getBlockState(
                 fallingBlockEntity.blockPosition()
