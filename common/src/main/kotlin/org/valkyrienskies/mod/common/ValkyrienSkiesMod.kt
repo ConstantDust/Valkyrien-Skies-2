@@ -78,6 +78,7 @@ object ValkyrienSkiesMod {
                 output.accept(TEST_HINGE_ITEM)
                 output.accept(TEST_FLAP_ITEM)
                 output.accept(TEST_WING_ITEM)
+                output.accept(PHYSICS_ENTITY_CREATOR_ITEM)
                 output.accept(SHIP_CREATOR_ITEM)
                 output.accept(SHIP_ASSEMBLER_ITEM)
                 output.accept(SHIP_CREATOR_ITEM_SMALLER)

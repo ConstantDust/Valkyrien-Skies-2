@@ -229,10 +229,9 @@ fun Level.raytraceEntities(
         it.worldToShip.transformPosition(origEndVec, end)
 
         // Shouldn't we have a double for scale in transform?
-        val scale = it.shipTransform.worldToShipMatrix.getScale(Vector3d())
-        assert(scale.x == scale.y && scale.y == scale.z)
+        val scale = 1.0 / it.shipTransform.shipToWorldScaling.x()
 
-        checkEntities(entities, start.toMinecraft(), end.toMinecraft(), scale.x)
+        checkEntities(entities, start.toMinecraft(), end.toMinecraft(), scale)
     }
 
     return if (resultEntity == null) {
