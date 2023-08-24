@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -75,75 +76,75 @@ public abstract class MixinLevelChunk extends ChunkAccess implements VSLevelChun
 
     @Override
     public void clearChunk() {
-        clearAllBlockEntities();
-        unregisterTickContainerFromLevel((ServerLevel) level);
-
-        // Set terrain to empty
-        heightmaps.clear();
-        Arrays.fill(sections, null);
-        final Registry<Biome> registry = level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY);
-        for (int i = 0; i < sections.length; ++i) {
-            if (sections[i] != null) continue;
-            sections[i] = new LevelChunkSection(levelHeightAccessor.getSectionYFromSectionIndex(i), registry);
-        }
-        this.setLightCorrect(false);
-
-        registerTickContainerInLevel((ServerLevel) level);
-        this.unsaved = true;
+//        clearAllBlockEntities();
+//        unregisterTickContainerFromLevel((ServerLevel) level);
+//
+//        // Set terrain to empty
+//        heightmaps.clear();
+//        Arrays.fill(sections, null);
+//        final Registry<Biome> registry = level.registryAccess().registryOrThrow(Registries.BIOME);
+//        for (int i = 0; i < sections.length; ++i) {
+//            if (sections[i] != null) continue;
+//            sections[i] = new LevelChunkSection(levelHeightAccessor.getSectionYFromSectionIndex(i), registry);
+//        }
+//        this.setLightCorrect(false);
+//
+//        registerTickContainerInLevel((ServerLevel) level);
+//        this.unsaved = true;
     }
 
     @Override
     public void copyChunkFromOtherDimension(@NotNull final VSLevelChunk srcChunkVS) {
-        clearAllBlockEntities();
-        unregisterTickContainerFromLevel((ServerLevel) level);
-
-        // Set terrain to empty
-        heightmaps.clear();
-        Arrays.fill(sections, null);
-
-        // Copy heightmap and sections and block entities from srcChunk
-        final LevelChunk srcChunk = (LevelChunk) srcChunkVS;
-        final CompoundTag compoundTag = ChunkSerializer.write((ServerLevel) srcChunk.getLevel(), srcChunk);
-        // Set status to be ProtoChunk to fix block entities not saving
-        compoundTag.putString("Status", ChunkStatus.ChunkType.PROTOCHUNK.name());
-        final ProtoChunk protoChunk = ChunkSerializer.read((ServerLevel) level, ((ServerLevel) level).getPoiManager(), chunkPos, compoundTag);
-
-        this.blockTicks = protoChunk.unpackBlockTicks();
-        this.fluidTicks = protoChunk.unpackFluidTicks();
-        // Copy data from the protoChunk
-        // this.chunkPos = chunkPos;
-        // this.upgradeData = upgradeData;
-        // this.levelHeightAccessor = levelHeightAccessor;
-
-        for (int i = 0; i < sections.length; i++) {
-            sections[i] = protoChunk.getSection(i);
-        }
-        final Registry<Biome> registry = level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY);
-        for (int i = 0; i < sections.length; ++i) {
-            if (sections[i] != null) continue;
-            sections[i] = new LevelChunkSection(levelHeightAccessor.getSectionYFromSectionIndex(i), registry);
-        }
-
-        // this.inhabitedTime = l;
-        // this.postProcessing = new ShortList[levelHeightAccessor.getSectionsCount()];
-        this.blendingData = protoChunk.getBlendingData();
-
-        for (final BlockEntity blockEntity : protoChunk.getBlockEntities().values()) {
-            this.setBlockEntity(blockEntity);
-        }
-        this.pendingBlockEntities.putAll(protoChunk.getBlockEntityNbts());
-        for (int i = 0; i < protoChunk.getPostProcessing().length; ++i) {
-            this.postProcessing[i] = protoChunk.getPostProcessing()[i];
-        }
-        this.setAllStarts(protoChunk.getAllStarts());
-        this.setAllReferences(protoChunk.getAllReferences());
-
-        // Recompute height maps instead of getting them from protoChunk (This fixes crashes from missing height maps)
-        Heightmap.primeHeightmaps(this, ALL_HEIGHT_MAP_TYPES);
-        this.setLightCorrect(false);
-
-        registerTickContainerInLevel((ServerLevel) level);
-
-        this.unsaved = true;
+//        clearAllBlockEntities();
+//        unregisterTickContainerFromLevel((ServerLevel) level);
+//
+//        // Set terrain to empty
+//        heightmaps.clear();
+//        Arrays.fill(sections, null);
+//
+//        // Copy heightmap and sections and block entities from srcChunk
+//        final LevelChunk srcChunk = (LevelChunk) srcChunkVS;
+//        final CompoundTag compoundTag = ChunkSerializer.write((ServerLevel) srcChunk.getLevel(), srcChunk);
+//        // Set status to be ProtoChunk to fix block entities not saving
+//        compoundTag.putString("Status", ChunkStatus.ChunkType.PROTOCHUNK.name());
+//        final ProtoChunk protoChunk = ChunkSerializer.read((ServerLevel) level, ((ServerLevel) level).getPoiManager(), chunkPos, compoundTag);
+//
+//        this.blockTicks = protoChunk.unpackBlockTicks();
+//        this.fluidTicks = protoChunk.unpackFluidTicks();
+//        // Copy data from the protoChunk
+//        // this.chunkPos = chunkPos;
+//        // this.upgradeData = upgradeData;
+//        // this.levelHeightAccessor = levelHeightAccessor;
+//
+//        for (int i = 0; i < sections.length; i++) {
+//            sections[i] = protoChunk.getSection(i);
+//        }
+//        final Registry<Biome> registry = level.registryAccess().registryOrThrow(Registries.BIOME);
+//        for (int i = 0; i < sections.length; ++i) {
+//            if (sections[i] != null) continue;
+//            sections[i] = new LevelChunkSection(levelHeightAccessor.getSectionYFromSectionIndex(i), registry);
+//        }
+//
+//        // this.inhabitedTime = l;
+//        // this.postProcessing = new ShortList[levelHeightAccessor.getSectionsCount()];
+//        this.blendingData = protoChunk.getBlendingData();
+//
+//        for (final BlockEntity blockEntity : protoChunk.getBlockEntities().values()) {
+//            this.setBlockEntity(blockEntity);
+//        }
+//        this.pendingBlockEntities.putAll(protoChunk.getBlockEntityNbts());
+//        for (int i = 0; i < protoChunk.getPostProcessing().length; ++i) {
+//            this.postProcessing[i] = protoChunk.getPostProcessing()[i];
+//        }
+//        this.setAllStarts(protoChunk.getAllStarts());
+//        this.setAllReferences(protoChunk.getAllReferences());
+//
+//        // Recompute height maps instead of getting them from protoChunk (This fixes crashes from missing height maps)
+//        Heightmap.primeHeightmaps(this, ALL_HEIGHT_MAP_TYPES);
+//        this.setLightCorrect(false);
+//
+//        registerTickContainerInLevel((ServerLevel) level);
+//
+//        this.unsaved = true;
     }
 }

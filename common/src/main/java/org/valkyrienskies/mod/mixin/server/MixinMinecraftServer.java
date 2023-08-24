@@ -230,8 +230,9 @@ public abstract class MixinMinecraftServer implements IShipObjectWorldServerProv
             final ServerLevel level = dimensionToLevelMap.get(shipObject.getChunkClaimDimension());
             final Vector3dc shipPos = shipObject.getTransform().getPositionInWorld();
             final double bbRadius = 0.5;
-            final BlockPos blockPos = new BlockPos(shipPos.x() - bbRadius, shipPos.y() - bbRadius, shipPos.z() - bbRadius);
-            final BlockPos blockPos2 = new BlockPos(shipPos.x() + bbRadius, shipPos.y() + bbRadius, shipPos.z() + bbRadius);
+            final BlockPos blockPos =
+                BlockPos.containing(shipPos.x() - bbRadius, shipPos.y() - bbRadius, shipPos.z() - bbRadius);
+            final BlockPos blockPos2 = BlockPos.containing(shipPos.x() + bbRadius, shipPos.y() + bbRadius, shipPos.z() + bbRadius);
             // Only run this code if the chunks between blockPos and blockPos2 are loaded
             if (level.hasChunksAt(blockPos, blockPos2)) {
                 shipObject.decayPortalCoolDown();
@@ -291,43 +292,45 @@ public abstract class MixinMinecraftServer implements IShipObjectWorldServerProv
     @Unique
     @Nullable
     private PortalInfo findDimensionEntryPoint(@NotNull final ServerLevel srcLevel, @NotNull final ServerLevel destLevel, @Nullable final BlockPos portalEntrancePos, @NotNull final Vector3dc shipPos) {
-        final boolean bl = srcLevel.dimension() == Level.END && destLevel.dimension() == Level.OVERWORLD;
-        final boolean bl2 = destLevel.dimension() == Level.END;
-        final Vec3 deltaMovement = Vec3.ZERO;
-        final EntityDimensions entityDimensions = new EntityDimensions(1.0f, 1.0f, true);
-        if (bl || bl2) {
-            final BlockPos blockPos = bl2 ? ServerLevel.END_SPAWN_POINT : destLevel.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, destLevel.getSharedSpawnPos());
-            return new PortalInfo(new Vec3((double)blockPos.getX() + 0.5, blockPos.getY(), (double)blockPos.getZ() + 0.5), deltaMovement, 0f, 0f);
-        }
-        final boolean bl3 = destLevel.dimension() == Level.NETHER;
-        if (srcLevel.dimension() != Level.NETHER && !bl3) {
-            return null;
-        }
-        final WorldBorder worldBorder = destLevel.getWorldBorder();
-        final double d = DimensionType.getTeleportationScale(srcLevel.dimensionType(), destLevel.dimensionType());
-        final BlockPos blockPos2 = worldBorder.clampToBounds(shipPos.x() * d, shipPos.y(), shipPos.z() * d);
-        return this.getExitPortal(destLevel, blockPos2, bl3, worldBorder).map(foundRectangle -> {
-            final Vec3 vec3;
-            final Direction.Axis axis;
-            if (portalEntrancePos != null) {
-                final BlockState blockState = srcLevel.getBlockState(portalEntrancePos);
-                if (blockState.hasProperty(BlockStateProperties.HORIZONTAL_AXIS)) {
-                    axis = blockState.getValue(BlockStateProperties.HORIZONTAL_AXIS);
-                    final BlockUtil.FoundRectangle foundRectangle2 =
-                        BlockUtil.getLargestRectangleAround(portalEntrancePos, axis, 21, Direction.Axis.Y, 21,
-                            blockPos -> srcLevel.getBlockState(blockPos) == blockState);
-                    vec3 = this.getRelativePortalPosition(axis, foundRectangle2, entityDimensions,
-                        VectorConversionsMCKt.toMinecraft(shipPos));
-                } else {
-                    axis = Direction.Axis.X;
-                    vec3 = new Vec3(0.5, 0.0, 0.0);
-                }
-            } else {
-                axis = Direction.Axis.X;
-                vec3 = new Vec3(0.5, 0.0, 0.0);
-            }
-            return PortalShape.createPortalInfo(destLevel, foundRectangle, axis, vec3, entityDimensions, deltaMovement, 0.0f, 0.0f);
-        }).orElse(null);
+        return null;
+
+//        final boolean bl = srcLevel.dimension() == Level.END && destLevel.dimension() == Level.OVERWORLD;
+//        final boolean bl2 = destLevel.dimension() == Level.END;
+//        final Vec3 deltaMovement = Vec3.ZERO;
+//        final EntityDimensions entityDimensions = new EntityDimensions(1.0f, 1.0f, true);
+//        if (bl || bl2) {
+//            final BlockPos blockPos = bl2 ? ServerLevel.END_SPAWN_POINT : destLevel.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, destLevel.getSharedSpawnPos());
+//            return new PortalInfo(new Vec3((double)blockPos.getX() + 0.5, blockPos.getY(), (double)blockPos.getZ() + 0.5), deltaMovement, 0f, 0f);
+//        }
+//        final boolean bl3 = destLevel.dimension() == Level.NETHER;
+//        if (srcLevel.dimension() != Level.NETHER && !bl3) {
+//            return null;
+//        }
+//        final WorldBorder worldBorder = destLevel.getWorldBorder();
+//        final double d = DimensionType.getTeleportationScale(srcLevel.dimensionType(), destLevel.dimensionType());
+//        final BlockPos blockPos2 = worldBorder.clampToBounds(shipPos.x() * d, shipPos.y(), shipPos.z() * d);
+//        return this.getExitPortal(destLevel, blockPos2, bl3, worldBorder).map(foundRectangle -> {
+//            final Vec3 vec3;
+//            final Direction.Axis axis;
+//            if (portalEntrancePos != null) {
+//                final BlockState blockState = srcLevel.getBlockState(portalEntrancePos);
+//                if (blockState.hasProperty(BlockStateProperties.HORIZONTAL_AXIS)) {
+//                    axis = blockState.getValue(BlockStateProperties.HORIZONTAL_AXIS);
+//                    final BlockUtil.FoundRectangle foundRectangle2 =
+//                        BlockUtil.getLargestRectangleAround(portalEntrancePos, axis, 21, Direction.Axis.Y, 21,
+//                            blockPos -> srcLevel.getBlockState(blockPos) == blockState);
+//                    vec3 = this.getRelativePortalPosition(axis, foundRectangle2, entityDimensions,
+//                        VectorConversionsMCKt.toMinecraft(shipPos));
+//                } else {
+//                    axis = Direction.Axis.X;
+//                    vec3 = new Vec3(0.5, 0.0, 0.0);
+//                }
+//            } else {
+//                axis = Direction.Axis.X;
+//                vec3 = new Vec3(0.5, 0.0, 0.0);
+//            }
+//            return PortalShape.createPortalInfo(destLevel, foundRectangle, axis, vec3, entityDimensions, deltaMovement, 0.0f, 0.0f);
+//        }).orElse(null);
     }
 
     @Unique

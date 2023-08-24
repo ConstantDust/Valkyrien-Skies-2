@@ -2,6 +2,7 @@ package org.valkyrienskies.mod.common.world
 
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.Vec3i
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.BlockGetter
@@ -80,7 +81,7 @@ fun Level.clipIncludeShips(
     return closestHit
 }
 
-// copy paste of vanilla raycast with the option to specify a custom start/end
+// copy and paste of vanilla raycast with the option to specify a custom start/end
 private fun Level.clip(context: ClipContext, realStart: Vec3, realEnd: Vec3): BlockHitResult {
     return clip(
         realStart, realEnd, context,
@@ -100,7 +101,7 @@ private fun Level.clip(context: ClipContext, realStart: Vec3, realEnd: Vec3): Bl
         }
     ) { raycastContext: ClipContext ->
         val vec3d = realStart.subtract(realEnd)
-        BlockHitResult.miss(realEnd, Direction.getNearest(vec3d.x, vec3d.y, vec3d.z), BlockPos(realEnd))
+        BlockHitResult.miss(realEnd, Direction.getNearest(vec3d.x, vec3d.y, vec3d.z), BlockPos.containing(realEnd))
     } as BlockHitResult
 }
 
@@ -267,6 +268,6 @@ fun BlockGetter.vanillaClip(context: ClipContext): BlockHitResult =
             val vec3 = ctx.from.subtract(ctx.to)
             BlockHitResult.miss(
                 ctx.to, Direction.getNearest(vec3.x, vec3.y, vec3.z),
-                BlockPos(ctx.to)
+                BlockPos.containing(ctx.to)
             )
         })
