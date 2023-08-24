@@ -100,7 +100,7 @@ private fun Level.clip(context: ClipContext, realStart: Vec3, realEnd: Vec3): Bl
         }
     ) { raycastContext: ClipContext ->
         val vec3d = realStart.subtract(realEnd)
-        BlockHitResult.miss(realEnd, Direction.getNearest(vec3d.x, vec3d.y, vec3d.z), BlockPos.containing(realEnd))
+        BlockHitResult.miss(realEnd, Direction.getNearest(vec3d.x, vec3d.y, vec3d.z), BlockPos(realEnd))
     } as BlockHitResult
 }
 
@@ -222,14 +222,12 @@ fun Level.raytraceEntities(
 
     val start = Vector3d()
     val end = Vector3d()
-    if (shipObjectWorld == null) logger.error("rayTraceEntities shipObjectWorld was null! this should never happen!")
 
-    shipObjectWorld?.loadedShips?.getIntersecting(origBoundingBoxM.toJOML())?.forEach {
+    shipObjectWorld.loadedShips.getIntersecting(origBoundingBoxM.toJOML()).forEach {
         it.worldToShip.transformPosition(origStartVec, start)
         it.worldToShip.transformPosition(origEndVec, end)
 
-        // Shouldn't we have a double for scale in transform?
-        val scale = 1.0 / it.shipTransform.shipToWorldScaling.x()
+        val scale = 1.0 / it.transform.shipToWorldScaling.x()
 
         checkEntities(entities, start.toMinecraft(), end.toMinecraft(), scale)
     }
@@ -269,6 +267,6 @@ fun BlockGetter.vanillaClip(context: ClipContext): BlockHitResult =
             val vec3 = ctx.from.subtract(ctx.to)
             BlockHitResult.miss(
                 ctx.to, Direction.getNearest(vec3.x, vec3.y, vec3.z),
-                BlockPos.containing(ctx.to)
+                BlockPos(ctx.to)
             )
         })

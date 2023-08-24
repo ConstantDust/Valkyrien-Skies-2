@@ -36,17 +36,20 @@ class PhysicsEntityCreatorItem(
             val shipId = level.shipObjectWorld.allocateShipId(level.dimensionId)
             val sphereRadius = 0.5
             val offsetInLocal: Vector3dc = ctx.clickedFace.normal.toJOMLD().mul(sphereRadius)
+
             val shipOn = ctx.level.getShipManagingPos(ctx.clickedPos)
             val offsetInGlobal = if (shipOn != null) {
                 shipOn.transform.shipToWorldRotation.transform(offsetInLocal, Vector3d())
             } else {
                 offsetInLocal
             }
+
             val entityPos: Vector3dc = if (shipOn != null) {
-                shipOn.transform.shipToWorld.transformPosition(ctx.clickLocation.toJOML()).add(offsetInGlobal)
+                 shipOn.transform.shipToWorld.transformPosition(ctx.clickLocation.toJOML()).add(offsetInGlobal)
             } else {
                 ctx.clickLocation.toJOML().add(offsetInGlobal)
             }
+
             val transform = Companion.create(entityPos, Vector3d())
             val physicsEntityData = VSPhysicsEntity.createBasicSphereData(shipId, transform, sphereRadius)
             entity.setPhysicsEntityData(physicsEntityData)
